@@ -432,4 +432,7 @@
 
 #define C_BUTTONS     (U_CBUTTONS | D_CBUTTONS | L_CBUTTONS | R_CBUTTONS   )
 
+#define SPD_MUL (0.5)
+#define SPD_FIX(x) (x * 0.5)
+
 #endif // SM64_H

@@ -659,12 +659,12 @@ s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {
     // past it without stopping.
 
     if (current < target) {
-        current += inc;
+        current += SPD_FIX(inc);
         if (current > target) {
             current = target;
         }
     } else {
-        current -= dec;
+        current -= SPD_FIX(dec);
         if (current < target) {
             current = target;
         }
@@ -678,12 +678,12 @@ s32 approach_s32(s32 current, s32 target, s32 inc, s32 dec) {
  */
 f32 approach_f32(f32 current, f32 target, f32 inc, f32 dec) {
     if (current < target) {
-        current += inc;
+        current += SPD_FIX(inc);
         if (current > target) {
             current = target;
         }
     } else {
-        current -= dec;
+        current -= SPD_FIX(dec);
         if (current < target) {
             current = target;
         }
