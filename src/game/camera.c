@@ -952,7 +952,7 @@ s32 update_8_directions_camera(struct Camera *c, Vec3f focus, Vec3f pos) {
 void radial_camera_move(struct Camera *c) {
     s16 maxAreaYaw = DEGREES(60);
     s16 minAreaYaw = DEGREES(-60);
-    s16 rotateSpeed = 0x1000;
+    s16 rotateSpeed = SPD_FIX(0x1000);
     s16 avoidYaw;
     s32 avoidStatus;
     UNUSED s16 unused1 = 0;
@@ -989,7 +989,7 @@ void radial_camera_move(struct Camera *c) {
     }
 
     if (gCameraMovementFlags & CAM_MOVE_ENTERED_ROTATE_SURFACE) {
-        rotateSpeed = 0x200;
+        rotateSpeed = SPD_FIX(0x200);
     }
 
     if (c->mode == CAMERA_MODE_OUTWARD_RADIAL) {
@@ -4023,7 +4023,7 @@ s32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier) {
     if (multiplier > 1.f) {
         multiplier = 1.f;
     }
-    *current = *current + (target - *current) * multiplier;
+    *current = *current + SPD_FIX((target - *current) * multiplier);
     if (*current == target) {
         return FALSE;
     } else {
@@ -4035,7 +4035,7 @@ s32 approach_f32_asymptotic_bool(f32 *current, f32 target, f32 multiplier) {
  * Nearly the same as the above function, returns new value instead.
  */
 f32 approach_f32_asymptotic(f32 current, f32 target, f32 multiplier) {
-    current = current + (target - current) * multiplier;
+    current = current + SPD_FIX((target - current) * multiplier);
     return current;
 }
 
@@ -4050,9 +4050,9 @@ s32 approach_s16_asymptotic_bool(s16 *current, s16 target, s16 divisor) {
     if (divisor == 0) {
         *current = target;
     } else {
-        temp -= target;
+        temp -= SPD_FIX(target);
         temp -= temp / divisor;
-        temp += target;
+        temp += SPD_FIX(target);
         *current = temp;
     }
     if (*current == target) {
@@ -4072,9 +4072,9 @@ s32 approach_s16_asymptotic(s16 current, s16 target, s16 divisor) {
     if (divisor == 0) {
         current = target;
     } else {
-        temp -= target;
+        temp -= SPD_FIX(target);
         temp -= temp / divisor;
-        temp += target;
+        temp += SPD_FIX(target);
         current = temp;
     }
     return current;
@@ -4117,14 +4117,14 @@ s32 camera_approach_s16_symmetric_bool(s16 *current, s16 target, s16 increment) 
         increment = -1 * increment;
     }
     if (dist > 0) {
-        dist -= increment;
+        dist -= SPD_FIX(increment);
         if (dist >= 0) {
             *current = target - dist;
         } else {
             *current = target;
         }
     } else {
-        dist += increment;
+        dist += SPD_FIX(increment);
         if (dist <= 0) {
             *current = target - dist;
         } else {
@@ -4145,14 +4145,14 @@ s32 camera_approach_s16_symmetric(s16 current, s16 target, s16 increment) {
         increment = -1 * increment;
     }
     if (dist > 0) {
-        dist -= increment;
+        dist -= SPD_FIX(increment);
         if (dist >= 0) {
             current = target - dist;
         } else {
             current = target;
         }
     } else {
-        dist += increment;
+        dist += SPD_FIX(increment);
         if (dist <= 0) {
             current = target - dist;
         } else {
@@ -4187,14 +4187,14 @@ s32 camera_approach_f32_symmetric_bool(f32 *current, f32 target, f32 increment) 
         increment = -1 * increment;
     }
     if (dist > 0) {
-        dist -= increment;
+        dist -= SPD_FIX(increment);
         if (dist > 0) {
             *current = target - dist;
         } else {
             *current = target;
         }
     } else {
-        dist += increment;
+        dist += SPD_FIX(increment);
         if (dist < 0) {
             *current = target - dist;
         } else {
@@ -4218,14 +4218,14 @@ f32 camera_approach_f32_symmetric(f32 current, f32 target, f32 increment) {
         increment = -1 * increment;
     }
     if (dist > 0) {
-        dist -= increment;
+        dist -= SPD_FIX(increment);
         if (dist > 0) {
             current = target - dist;
         } else {
             current = target;
         }
     } else {
-        dist += increment;
+        dist += SPD_FIX(increment);
         if (dist < 0) {
             current = target - dist;
         } else {
@@ -5283,11 +5283,13 @@ void warp_camera(f32 displacementX, f32 displacementY, f32 displacementZ) {
 void approach_camera_height(struct Camera *c, f32 goal, f32 inc) {
     if (sStatusFlags & CAM_FLAG_SMOOTH_MOVEMENT) {
         if (c->pos[1] < goal) {
-            if ((c->pos[1] += inc) > goal) {
+            c->pos[1] += SPD_FIX(inc);
+            if (c->pos[1] > goal) {
                 c->pos[1] = goal;
             }
         } else {
-            if ((c->pos[1] -= inc) < goal) {
+            c->pos[1] -= SPD_FIX(inc);
+            if (c->pos[1] < goal) {
                 c->pos[1] = goal;
             }
         }

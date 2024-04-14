@@ -304,14 +304,14 @@ void cur_obj_forward_vel_approach_upward(f32 target, f32 increment) {
     if (o->oForwardVel >= target) {
         o->oForwardVel = target;
     } else {
-        o->oForwardVel += increment;
+        o->oForwardVel += SPD_FIX(increment);
     }
 }
 
 s32 approach_f32_signed(f32 *value, f32 target, f32 increment) {
     s32 reachedTarget = FALSE;
 
-    *value += increment;
+    *value += SPD_FIX(increment);
 
     if (increment >= 0.0f) {
         if (*value > target) {
@@ -333,13 +333,13 @@ f32 approach_f32_symmetric(f32 value, f32 target, f32 increment) {
 
     if ((dist = target - value) >= 0.0f) {
         if (dist > increment) {
-            value += increment;
+            value += SPD_FIX(increment);
         } else {
             value = target;
         }
     } else {
         if (dist < -increment) {
-            value -= increment;
+            value -= SPD_FIX(increment);
         } else {
             value = target;
         }
@@ -353,13 +353,13 @@ s16 approach_s16_symmetric(s16 value, s16 target, s16 increment) {
 
     if (dist >= 0) {
         if (dist > increment) {
-            value += increment;
+            value += SPD_FIX(increment);
         } else {
             value = target;
         }
     } else {
         if (dist < -increment) {
-            value -= increment;
+            value -= SPD_FIX(increment);
         } else {
             value = target;
         }

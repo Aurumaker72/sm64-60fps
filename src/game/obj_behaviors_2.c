@@ -390,7 +390,7 @@ static s32 approach_f32_ptr(f32 *px, f32 target, f32 delta) {
         delta = -delta;
     }
 
-    *px += delta;
+    *px += SPD_FIX(delta);
 
     if ((*px - target) * delta >= 0) {
         *px = target;

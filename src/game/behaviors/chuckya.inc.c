@@ -84,12 +84,12 @@ s32 approach_forward_vel(f32 *forwardVel, f32 spC, f32 sp10) {
     s32 sp4 = 0;
 
     if (*forwardVel > spC) {
-        *forwardVel -= sp10;
+        *forwardVel -= SPD_FIX(sp10);
         if (*forwardVel < spC) {
             *forwardVel = spC;
         }
     } else if (*forwardVel < spC) {
-        *forwardVel += sp10;
+        *forwardVel += SPD_FIX(sp10);
         if (*forwardVel > spC) {
             *forwardVel = spC;
         }
